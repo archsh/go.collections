@@ -8,20 +8,9 @@ const (
 
 
 type Collection interface {
-    Push(v interface{})
-    Pop(v interface{})
+    Push(interface{})
+    Pop() interface{}
     Len() int
     Range(...int) []interface{}
     OnEvicted(func(interface{}))
-}
-
-
-// FIFO: Queue
-type Queue struct {
-
-}
-
-// FILO(LIFO): Stack
-type Stack struct {
-
 }
