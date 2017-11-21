@@ -10,6 +10,6 @@ type Collection interface {
     Push(interface{}) error
     Pop() (interface{},error)
     Len() int
-    Range(...int) ([]interface{},error)
+    Range(...int) []interface{}
     OnEvicted(func(interface{}))
 }

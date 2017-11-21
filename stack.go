@@ -15,7 +15,7 @@ type Stack struct {
 
 func NewStack(size int) (*Stack, error) {
     if size < 1 {
-        return nil, errors.New("size can not be less than 1.")
+        return nil, errors.New("size can not be less than 1. ")
     }
     s := &Stack{
         ll: list.New(),
@@ -25,28 +25,29 @@ func NewStack(size int) (*Stack, error) {
 }
 
 func (self *Stack) Push( v interface{}) error {
-    if self.ll != nil {
-        if self.ll.Len() >= self.size {
-            e, r := self.Pop()
-            if nil != r {
-                return r
-            }
-            if nil != self.on_evicted {
-                self.on_evicted(e)
-            }
-        }
-        self.ll.PushBack(v)
+    if nil == self.ll {
+        return errors.New("Not initialized! ")
     }
+    if self.ll.Len() >= self.size {
+        e, r := self.Pop()
+        if nil != r {
+            return r
+        }
+        if nil != self.on_evicted {
+            self.on_evicted(e)
+        }
+    }
+    self.ll.PushBack(v)
     return nil
 }
 
 func (self *Stack) Pop() (interface{}, error) {
     if self.ll == nil {
-        return nil,nil
+        return nil,errors.New("Not initialized! ")
     }
     e := self.ll.Back()
     if nil == e {
-        return nil,nil
+        return nil,errors.New("Empty! ")
     }
     v := e.Value
     self.ll.Remove(e)
@@ -59,8 +60,11 @@ func (self *Stack) Len() int {
     }
     return self.ll.Len()
 }
-func (self *Stack) Range(pos ...int) ([]interface{},error) {
-    return nil,nil
+func (self *Stack) Range(pos ...int) []interface{} {
+    if nil == self.ll {
+        return nil
+    }
+    return nil
 }
 
 func (self *Stack) OnEvicted(f func(interface{})) {
