@@ -6,11 +6,10 @@ const (
     EMAIL = "archsh@gmail.com"
 )
 
-
 type Collection interface {
-    Push(interface{})
-    Pop() interface{}
+    Push(interface{}) error
+    Pop() (interface{},error)
     Len() int
-    Range(...int) []interface{}
+    Range(...int) ([]interface{},error)
     OnEvicted(func(interface{}))
 }

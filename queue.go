@@ -5,7 +5,7 @@ import (
     //"fmt"
     "errors"
 )
-
+ 
 // FIFO: Queue
 type Queue struct {
     ll *list.List
@@ -24,23 +24,33 @@ func NewQueue(size int) (*Queue, error) {
     return q, nil
 }
 
-func (self *Queue) Push( v interface{}) {
+func (self *Queue) Push( v interface{}) error {
     if self.ll != nil {
+        if self.ll.Len() >= self.size {
+            e, r := self.Pop()
+            if nil != r {
+                return r
+            }
+            if nil != self.on_evicted {
+                self.on_evicted(e)
+            }
+        }
         self.ll.PushBack(v)
     }
+    return nil
 }
 
-func (self *Queue) Pop() interface{} {
+func (self *Queue) Pop() (interface{}, error) {
     if self.ll == nil {
-        return nil
+        return nil, nil
     }
     e := self.ll.Front()
     if nil == e {
-        return nil
+        return nil,nil
     }
     v := e.Value
     self.ll.Remove(e)
-    return v
+    return v,nil
 }
 
 func (self *Queue) Len() int {
@@ -49,8 +59,8 @@ func (self *Queue) Len() int {
     }
     return self.ll.Len()
 }
-func (self *Queue) Range(pos ...int) []interface{} {
-    return nil
+func (self *Queue) Range(pos ...int) ([]interface{},error) {
+    return nil,nil
 }
 
 func (self *Queue) OnEvicted(f func(interface{})) {

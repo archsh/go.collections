@@ -24,23 +24,33 @@ func NewStack(size int) (*Stack, error) {
     return s, nil
 }
 
-func (self *Stack) Push( v interface{}) {
+func (self *Stack) Push( v interface{}) error {
     if self.ll != nil {
+        if self.ll.Len() >= self.size {
+            e, r := self.Pop()
+            if nil != r {
+                return r
+            }
+            if nil != self.on_evicted {
+                self.on_evicted(e)
+            }
+        }
         self.ll.PushBack(v)
     }
+    return nil
 }
 
-func (self *Stack) Pop() interface{} {
+func (self *Stack) Pop() (interface{}, error) {
     if self.ll == nil {
-        return nil
+        return nil,nil
     }
-    e := self.ll.Front()
+    e := self.ll.Back()
     if nil == e {
-        return nil
+        return nil,nil
     }
     v := e.Value
     self.ll.Remove(e)
-    return v
+    return v,nil
 }
 
 func (self *Stack) Len() int {
@@ -49,8 +59,8 @@ func (self *Stack) Len() int {
     }
     return self.ll.Len()
 }
-func (self *Stack) Range(pos ...int) []interface{} {
-    return nil
+func (self *Stack) Range(pos ...int) ([]interface{},error) {
+    return nil,nil
 }
 
 func (self *Stack) OnEvicted(f func(interface{})) {
