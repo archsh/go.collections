@@ -87,7 +87,7 @@ func (self *Queue) Range(pos ...int) []interface{} {
         begin = self.ll.Len() + begin
     }
     if limit <= 0 {
-
+        return nil
     }
     for e := self.ll.Front(); e != nil; e = e.Next() {
         if limit <= 0 {

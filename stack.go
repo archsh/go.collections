@@ -64,7 +64,40 @@ func (self *Stack) Range(pos ...int) []interface{} {
     if nil == self.ll {
         return nil
     }
-    return nil
+    var i, begin, limit int
+    //i := 0
+    //begin := 0
+    //limit := self.ll.Len()
+    var result []interface{}
+    switch len(pos) {
+    case 0:
+        begin = 0
+        limit = self.ll.Len()
+    case 1:
+        begin = pos[0]
+        limit = self.ll.Len()
+    case 2:
+        begin = pos[0]
+        limit = pos[1]
+    default:
+        return nil
+    }
+    if begin < 0 {
+        begin = self.ll.Len() + begin
+    }
+    if limit <= 0 {
+        return nil
+    }
+    for e := self.ll.Back(); e != nil; e = e.Prev() {
+        if limit <= 0 {
+            break
+        }
+        if i>= begin {
+            result = append(result, e.Value)
+        }
+        i += 1
+    }
+    return result
 }
 
 func (self *Stack) OnEvicted(f func(interface{})) {
